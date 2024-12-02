@@ -13,9 +13,10 @@ app.use('/api/trips', tripRoutes);
 
 // Start server --------------<
 const PORT = process.env.PORT || 5000;
+const dev_mode = process.env.NODE_ENV || 'prod';
 
 connectDB().then(() => {
-    if ((process.env.NODE_ENV || "prod") === 'dev') {
+    if (dev_mode === 'dev') {
         console.log('Running in development mode. Seeding database...');
         require('./db/seed');
     }
