@@ -1,6 +1,6 @@
 const express = require('express');
-const router = express.Router();
 const { getTrips, createTrip } = require('../controllers/tripController');
+const router = express.Router();
 
 router.get('/', getTrips);
 router.post('/', createTrip);
