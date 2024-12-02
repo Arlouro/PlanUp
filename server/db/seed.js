@@ -3,11 +3,11 @@ const fs = require('fs');
 require('dotenv').config();
 
 const uri = process.env.MONGO_URI;
-const environment = process.env.NODE_ENV || 'production';
+const environment = process.env.NODE_ENV || 'prod';
 const client = new MongoClient(uri);
 
 const seedDatabase = async () => {
-    if (environment !== 'development') {
+    if (environment !== 'dev') {
         console.log(`Seeding skipped. Current environment: ${environment}`);
         return;
     }
