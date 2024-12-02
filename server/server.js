@@ -1,22 +1,23 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+const { connectDB } = require('./config/db');
+const tripRoutes = require('./routes/tripRoutes');
 
 const app = express();
 
-// Middleware ----------------<
+// Middleware --------------<
 app.use(express.json());
 app.use(cors());
 
-// MongoDB Connection ----------------<
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+// Routes --------------<
+app.use('/api/trips', tripRoutes);
 
-// Routes ----------------<
-app.use('/api/trips', require('./routes/tripRoutes'));
-
-// Start Server ----------------<
+// Start server --------------<
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+connectDB().then(() => {
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}).catch(err => {
+    console.error('Failed to connect to DB:', err);
+    process.exit(1);
+});
