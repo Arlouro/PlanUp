@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const { connectDB } = require('./config/db');
 const tripRoutes = require('./routes/tripRoutes');
@@ -12,8 +11,8 @@ app.use(express.json());
 app.use('/api/trips', tripRoutes);
 
 // Start server --------------<
-const PORT = process.env.PORT || 5000;
-const dev_mode = process.env.NODE_ENV || 'prod';
+const PORT = 5000;
+const dev_mode = 'prod';
 
 connectDB().then(() => {
     if (dev_mode === 'dev') {
