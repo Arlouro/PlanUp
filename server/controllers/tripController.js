@@ -1,4 +1,4 @@
-const { getDB } = require('../config/db');
+import { getDB } from '../config/db.js';
 
 exports.getTrips = async (req, res) => {
     try {
@@ -23,11 +23,11 @@ exports.createTrip = async (req, res) => {
         const newTrip = {
             name,
             description,
-            days: [], // Initialize with no activities
+            days: [],
             createdAt: new Date(),
         };
         const result = await db.collection('trips').insertOne(newTrip);
-        res.status(201).json(result.ops[0]); // Return the created trip
+        res.status(201).json(result.ops[0]);
     } catch (err) {
         console.error('Error creating trip:', err);
         res.status(500).json({ message: 'Server error' });

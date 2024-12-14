@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+import { MongoClient } from 'mongodb';
 require('dotenv').config();
 
 const uri = process.env.MONGO_URI || "mongodb://127.0.0.1:6000/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.3";

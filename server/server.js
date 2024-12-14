@@ -1,7 +1,9 @@
-require('dotenv').config();
-const express = require('express');
-const { connectDB } = require('./config/db');
-const tripRoutes = require('./routes/tripRoutes');
+import express from 'express';
+import dotenv from 'dotenv';
+import { connectDB } from './config/db.js';
+import tripRoutes from './routes/tripRoutes.js';
+
+dotenv.config();
 
 const app = express();
 
@@ -18,7 +20,7 @@ const dev_mode = process.env.NODE_ENV || 'prod';
 connectDB().then(() => {
     if (dev_mode === 'dev') {
         console.log('Running in development mode. Seeding database...');
-        require('./db/seed');
+        require('./seed.js');
     }
 
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
