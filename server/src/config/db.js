@@ -1,25 +1,26 @@
 import { MongoClient } from 'mongodb';
-require('dotenv').config();
 
-const uri = process.env.MONGO_URI || "mongodb://127.0.0.1:6000/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.3";
-const client = new MongoClient(uri);
+let db; // This is the shared database instance
 
-let db;
+export const connectDB = async (mongoURI) => {
+    if (!mongoURI) {
+        throw new Error('❌ MongoDB connection string is undefined. Check your environment variables.');
+    }
 
-const connectDB = async () => {
     try {
+        const client = new MongoClient(mongoURI);
         await client.connect();
-        db = client.db('trip-planner');
-        console.log('MongoDB connected');
-    } catch (err) {
-        console.error('MongoDB connection error:', err);
-        process.exit(1);
+        db = client.db();
+        console.log('✅ MongoDB connected successfully!');
+    } catch (error) {
+        console.error('❌ MongoDB connection error:', error.message);
+        throw error;
     }
 };
 
-const getDB = () => {
-    if (!db) throw new Error('Database not connected');
-    return db;
+export const getDB = () => {
+    if (!db) {
+        throw new Error('❌ Database not connected. Please call connectDB first.');
+    }
+    return db; 
 };
-
-module.exports = { connectDB, getDB };

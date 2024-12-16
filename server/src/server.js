@@ -1,29 +1,25 @@
 import express from 'express';
-import dotenv from 'dotenv';
 import { connectDB } from './config/db.js';
+import config from './config/env.js';
 import tripRoutes from './routes/tripRoutes.js';
-
-dotenv.config();
 
 const app = express();
 
-// Middleware --------------<
+// Middleware ---------<
 app.use(express.json());
 
-// Routes --------------<
+// Routes ---------<
 app.use('/api/trips', tripRoutes);
 
-// Start server --------------<
-const PORT = process.env.PORT || 5000;
-const dev_mode = process.env.NODE_ENV || 'prod';
-
-connectDB().then(() => {
-    if (dev_mode === 'dev') {
-        console.log('Running in development mode. Seeding database...');
-        require('./seed.js');
+const startServer = async () => {
+    try {
+        await connectDB(config.mongoURI);
+        app.listen(config.port, () => {
+            console.log(`✅ Server is running on http://localhost:${config.port}`);
+        });
+    } catch (error) {
+        console.error('❌ Error starting the server:', error.message);
     }
+};
 
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-}).catch(err => {
-    console.error('Failed to connect to database:', err);
-});
+startServer();

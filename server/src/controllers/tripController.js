@@ -1,21 +1,21 @@
 import { getDB } from '../config/db.js';
 
-exports.getTrips = async (req, res) => {
+export const getTrips = async (request, response) => {
     try {
         const db = getDB();
         const trips = await db.collection('trips').find().toArray(); // Query all trips
-        res.json(trips);
+        response.json(trips);
     } catch (err) {
         console.error('Error fetching trips:', err);
-        res.status(500).json({ message: 'Server error' });
+        response.status(500).json({ message: 'Server error' });
     }
 };
 
-exports.createTrip = async (req, res) => {
-    const { name, description } = req.body;
+export const createTrip = async (request, response) => {
+    const { name, description } = request.body;
 
     if (!name) {
-        return res.status(400).json({ message: 'Name is required' });
+        return response.status(400).json({ message: 'Name is required' });
     }
 
     try {
@@ -30,6 +30,6 @@ exports.createTrip = async (req, res) => {
         res.status(201).json(result.ops[0]);
     } catch (err) {
         console.error('Error creating trip:', err);
-        res.status(500).json({ message: 'Server error' });
+        response.status(500).json({ message: 'Server error' });
     }
 };

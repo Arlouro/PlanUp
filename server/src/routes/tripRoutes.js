@@ -6,4 +6,4 @@ const router = express.Router();
 router.get('/', getTrips);
 router.post('/', createTrip);
 
-module.exports = router;
+export default router;
