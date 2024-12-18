@@ -1,0 +1,67 @@
+.containerHP {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.appNameHP {
+  font-size: 10rem;
+  color: #fff;
+  margin: 0;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+.navbarHP {
+  position: fixed;
+  top: 0;
+  height: 10vh;
+  width: 100%;
+  padding: 0 20px;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbarHP ul {
+  list-style: none;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.navbarHP li {
+  height: 70px;
+}
+
+.logotype {
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.su {
+  height: 100%;
+  color: #607b97;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0px 50px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.log{
+    height: 100%;
+    color: #607b97;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 0px 50px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}

@@ -1,0 +1,98 @@
+.containerTP {
+  background-color: #fff;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+}
+
+.coluna-aviao {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 20%;
+  height: 100%;
+}
+
+.coluna-aviao::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 30%;
+  transform: translateX(-50%);
+  width: 20%;
+  height: 100%;
+  background-color: #93c9ec;
+}
+
+.coluna-aviao .aviao {
+  width: 10rem;
+  height: 10rem;
+  position: fixed;
+  top: 30%;
+  left: 5.5%;
+  transform: translateX(-50%) rotate(180deg);
+  overflow: hidden;
+}
+
+.coluna-aviao .cloud {
+  width: auto;
+  height: 5rem;
+  overflow: hidden;
+}
+
+.coluna-aviao .cloud1 {
+  top: 20%;
+  left: 30%;
+}
+
+.coluna-aviao .cloud2-2 {
+  top: 60%;
+  left: 0%;
+  z-index: 100;
+}
+
+.coluna-aviao .cloud3 {
+  top: 90%;
+  left: 30%;
+  z-index: 100;
+}
+
+.coluna-aviao .cloud3-2 {
+  top: 90%;
+  left: 30%;
+  z-index: 100;
+}
+
+.coluna-aviao .cloud1-2 {
+  top: 90%;
+  left: 30%;
+  z-index: 100;
+}
+
+.coluna-aviao .cloud2 {
+  top: 90%;
+  left: 30%;
+  z-index: 100;
+}
+
+/* .all-body .wrapper {
+  padding: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 9rem;
+  padding-right: 15rem;
+}
+
+.all-body .btn {
+  background-color: #fff;
+  color: #999;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  margin: 0 5px;
+  box-shadow: 0 0 10px #999;
+} */

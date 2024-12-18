@@ -1,0 +1,71 @@
+.navbar {
+  background-color: #93c9ec;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 40px 20px;
+  z-index: 1000;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 90rem;
+  width: 100%;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.nav-links-top {
+  display: flex;
+  gap: 40px;
+  font-size: 1.1rem;
+}
+
+.nav-links-bottom {
+  display: flex;
+  gap: 30px;
+  font-size: 0.8rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #555;
+}
+
+.usersection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.username {
+  margin-right: 10px;
+  font-size: 1.3rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+.usericon {
+  color: #fff;
+  margin-right: 20px;
+}
