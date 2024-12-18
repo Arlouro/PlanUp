@@ -1,8 +1,13 @@
 import React from "react";
 import "./NavBar.css";
 import { IoPerson } from "react-icons/io5";
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
+  let location = useLocation();
+  let username = "Maria Rosa"; //modificar
+  let avatarUrl = `https://ui-avatars.com/api/?name=${username}&background=fff&color=random&size=55&rounded=true`;
+  
   return (
     <header className="navbar">
       <div className="navbar-container">
@@ -13,15 +18,17 @@ const Navbar = () => {
             <a href="/newtrip">NewTrip</a>
             <a href="/notifications">Notifications</a>
           </div>
-          <div className="nav-links-bottom">
-          <a href="#trip">Trip</a>
-          <a href="#activity">Activity</a>
-          <a href="#vote">Vote</a>
-          </div>
+          {location.pathname === "/mytrip" && (
+            <div className="nav-links-bottom">
+              <a href="#trip">Trip</a>
+              <a href="#activity">Activity</a>
+              <a href="#vote">Vote</a>
+            </div>
+          )}
         </nav>
         <div className="usersection">
           <span className="username">Maria Rosa</span>
-          <IoPerson className="usericon" />
+          <img src={avatarUrl} alt={username} className="usericon" />
         </div>
       </div>
     </header>

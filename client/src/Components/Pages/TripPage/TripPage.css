@@ -1,8 +1,10 @@
 .containerTP {
   background-color: #fff;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
+  min-width: 100vw;
   display: flex;
+  justify-content: center;
 }
 
 .coluna-aviao {
@@ -12,7 +14,7 @@
   align-items: center;
   position: relative;
   width: 20%;
-  height: 100%;
+  height: 100vh;
 }
 
 .coluna-aviao::before {
@@ -22,7 +24,7 @@
   left: 30%;
   transform: translateX(-50%);
   width: 20%;
-  height: 100%;
+  height: 100vh;
   background-color: #93c9ec;
 }
 
@@ -31,7 +33,7 @@
   height: 10rem;
   position: fixed;
   top: 30%;
-  left: 5.5%;
+  left: 3.5%;
   transform: translateX(-50%) rotate(180deg);
   overflow: hidden;
 }
@@ -77,22 +79,47 @@
   z-index: 100;
 }
 
-/* .all-body .wrapper {
-  padding: 5rem;
-  display: flex;
+.wrapper-box {
+  margin: 0 auto;
+  position: relative;
+  max-width: 60rem;
   flex-direction: column;
   gap: 1.5rem;
-  margin-top: 9rem;
-  padding-right: 15rem;
+  margin-top: 10rem;
+  height: 80px;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
-.all-body .btn {
+.wrapper-box .btn {
   background-color: #fff;
   color: #999;
-  width: 40px;
-  height: 40px;
-  border: 0;
-  border-radius: 50%;
+  border: none;
   margin: 0 5px;
+  width: 20px;
+  height: 20px;
   box-shadow: 0 0 10px #999;
-} */
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1;
+  transition: 0.3s;
+  position: absolute;
+}
+
+.wrapper-box .btn:first-of-type {
+  top: 50%; 
+  left: 1rem; 
+  transform: translateY(-50%);
+}
+
+.wrapper-box .btn:last-of-type {
+  top: 50%; 
+  right: 1rem; 
+  transform: translateY(-50%);
+}
