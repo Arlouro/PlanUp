@@ -8,6 +8,7 @@ import plane from "../../Assets/png/plane.png";
 import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
+import { authAPI } from '../../../services/api';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -15,6 +16,14 @@ const LoginForm = () => {
   const handleLogin = (event) => {
     event.preventDefault();
     navigate("/mytrip");
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await authAPI.loginWithGoogle();
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   return (
@@ -35,7 +44,7 @@ const LoginForm = () => {
           <img src={plane} alt="plane" />
         </div>
 
-        <form onSubmit={handleLogin} className="mega-form">
+        <form className="mega-form" onSubmit={handleLogin}>
           <h1>Login</h1>
           <div className="input-box">
             <input type="text" placeholder="Username" required />
@@ -50,7 +59,7 @@ const LoginForm = () => {
             <label>
               <input type="checkbox" /> Remember me
             </label>
-            <a href="#">Forgot password?</a> {/*MODIFICAR */}
+            <a href="#">Forgot password?</a>
           </div>
 
           <button type="submit">Login</button>
@@ -58,6 +67,7 @@ const LoginForm = () => {
             type="button"
             className="google-button"
             aria-label="Login with Google"
+            onClick={handleGoogleLogin}
           >
             <FaGoogle className="google-icon" />
           </button>

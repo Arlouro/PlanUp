@@ -8,6 +8,7 @@
     "dev": "node --watch src/server.js",
     "seed": "node src/seed.js"
   },
+  "proxy": "http://localhost:5000",
   "keywords": [],
   "author": "",
   "license": "ISC",
