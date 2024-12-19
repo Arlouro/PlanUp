@@ -67,5 +67,73 @@
 
 .usericon {
   color: #fff;
-  margin-right: 20px;
+  margin-right: 30px;
+}
+
+.dropdown {
+  position: relative;
+  padding: 0;
+  margin-left: 10px;
+}
+
+.dropdown > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.dropdown > summary::-webkit-details-marker {
+  display: none;
+}
+
+.dropdown ul {
+  position: absolute;
+  top: 55px;
+  right: -15px;
+  background: var(--dropdown-background, white);
+  color: var(--dropdown-color, black);
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  list-style: none;
+  padding: 10px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.dropdown ul li {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.dropdown ul li a,
+.dropdown ul li button {
+  display: block;
+  width: 100%;
+  padding: 10px 10px;
+  text-align: left;
+  color: var(--dropdown-color, black);
+  background: none;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.dropdown ul li a:hover,
+.dropdown ul li button:hover {
+  background-color: var(--dropdown-highlight, #93c9ec);
+  color: var(--dropdown-background, white);
+}
+
+.usericon-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.signout-button {
+  all: unset;
+  cursor: pointer;
+  width: 100%;
+  padding: 10px 10px;
+  text-align: left;
 }
