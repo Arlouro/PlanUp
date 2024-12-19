@@ -5,13 +5,19 @@ import { ObjectId } from 'mongodb';
 export const getTrips = async (request, response) => {
     try {
         const db = getDB();
-        const trips = await db.collection('trips').find().toArray();
+        const userId = request.user._id;
+    
+        const trips = await db
+            .collection('trips')
+            .find({ participants: userId })
+            .toArray();
+    
         response.json(trips);
-    } catch (err) {
-        console.error('Error fetching trips:', err);
+    } catch (error) {
+        console.error('Error fetching trips:', error.message);
         response.status(500).json({ message: 'Server error' });
     }
-};
+};  
 
 // Creation -----------------<
 export const createTrip = async (request, response) => {
@@ -78,68 +84,51 @@ export const createTrip = async (request, response) => {
     }
 };
 
+// Update -----------------<
+export const updateTrip = async (request, response) => {
+    try {
+        const { id } = request.params;
+        const db = getDB();
+        const userId = request.user._id;
+    
+        const trip = await db.collection('trips').findOne({ _id: new ObjectId(id) });
+    
+        if (!trip || trip.creator.toString() !== userId.toString()) {
+            return response.status(403).json({ message: 'Forbidden: You can only update your own trips.' });
+        }
 
+        const updates = request.body;
+        const result = await db
+            .collection('trips')
+            .updateOne({ _id: new ObjectId(id) }, { $set: updates });
+
+        response.json({ message: 'Trip updated successfully.', result });
+    } catch (error) {
+        console.error('Error updating trip:', error.message);
+        response.status(500).json({ message: 'Server error' });
+    }
+};  
 
 // Deletion -----------------<
 export const deleteTrip = async (request, response) => {
-    const { id } = request.params;
-
-    if (!ObjectId.isValid(id)) {
-        return response.status(400).json({ message: 'Invalid trip ID' });
-    }
-
     try {
+        const { id } = request.params;
         const db = getDB();
-        console.log(`Deleting trip with ID: ${id}`);
-        
-        const result = await db.collection('trips').deleteOne({ _id: new ObjectId(id) });
-        
-        if (result.deletedCount === 0) {
-            return response.status(404).json({ message: '🔎❌ Trip not found' });
+        const userId = request.user._id;
+
+        const trip = await db.collection('trips').findOne({ _id: new ObjectId(id) });
+
+        if (!trip || trip.creator.toString() !== userId.toString()) {
+            return response.status(403).json({ message: 'Forbidden: You can only delete your own trips.' });
         }
 
-        response.status(200).json({ message: '🗑️ Trip deleted successfully' });
-    } catch (err) {
-        console.error('Error deleting trip:', err.message);
+        await db.collection('trips').deleteOne({ _id: new ObjectId(id) });
+        response.json({ message: 'Trip deleted successfully.' });
+    } catch (error) {
+        console.error('Error deleting trip:', error.message);
         response.status(500).json({ message: 'Server error' });
     }
-};
-
-// Update -----------------<
-export const updateTrip = async (request, response) => {
-    const { tripId } = request.params;
-    const { name, description, days, participants } = request.body;
-
-    if (!tripId || !name || !description) {
-        return response.status(400).json({ message: 'Required fields are missing' });
-    }
-
-    try {
-        const db = getDB();
-
-        const updatedTrip = {
-            name,
-            description,
-            participants: participants || [],
-            days: days || [],
-            updatedAt: new Date(),
-        };
-
-        const result = await db.collection('trips').updateOne(
-            { _id: new ObjectId(tripId) },
-            { $set: updatedTrip }
-        );
-
-        if (result.matchedCount === 0) {
-            return response.status(404).json({ message: 'Trip not found' });
-        }
-
-        response.status(200).json({ message: 'Trip updated successfully' });
-    } catch (err) {
-        console.error('Error updating trip:', err);
-        response.status(500).json({ message: 'Server error' });
-    }
-};
+};  
 
 export const deleteAllTrips = async (request, response) => {
     try {
