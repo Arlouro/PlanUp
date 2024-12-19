@@ -63,20 +63,20 @@ const NewTripForm = () => {
             />
           </div>
           {isIconPickerOpen && (
-              <div className="icon-scroller">
-                {icons.map((icon) => (
-                  <img
-                    key={icon.id}
-                    src={icon.src}
-                    alt={icon.alt}
-                    width="20"
-                    height="20"
-                    className="icon-option"
-                    onClick={() => handleIconSelect(icon.src)}
-                  />
-                ))}
-              </div>
-            )}
+            <div className="icon-scroller">
+              {icons.map((icon) => (
+                <img
+                  key={icon.id}
+                  src={icon.src}
+                  alt={icon.alt}
+                  width="20"
+                  height="20"
+                  className="icon-option"
+                  onClick={() => handleIconSelect(icon.src)}
+                />
+              ))}
+            </div>
+          )}
           <div className="input-create-box">
             <input type="text" placeholder="Add Description" />
           </div>
@@ -89,10 +89,6 @@ const NewTripForm = () => {
           <div className="input-create-box">
             <input type="date" placeholder="End Date" required />
           </div>
-          <button id="create-btn" type="submit">
-            Create Trip
-          </button>
-
           <form className="add-activity-container">
             <h2 className="title">Adding Activity</h2>
             <div className="add-sub-container">
@@ -124,6 +120,9 @@ const NewTripForm = () => {
               Add Activity
             </button>
           </form>
+          <button id="create-btn" type="submit">
+            Create Trip
+          </button>
         </form>
       </div>
     </div>
