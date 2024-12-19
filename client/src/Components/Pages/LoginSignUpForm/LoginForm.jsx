@@ -7,16 +7,15 @@ import cloud3 from "../../Assets/png/cloud3.png";
 import plane from "../../Assets/png/plane.png";
 import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
+import { FaGoogle } from "react-icons/fa";
 
 const LoginForm = () => {
-
   const navigate = useNavigate();
 
   const handleLogin = (event) => {
-    event.preventDefault(); 
-    navigate("/mytrip"); 
+    event.preventDefault();
+    navigate("/mytrip");
   };
-
 
   return (
     <div className="container">
@@ -36,7 +35,7 @@ const LoginForm = () => {
           <img src={plane} alt="plane" />
         </div>
 
-         <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className="mega-form">
           <h1>Login</h1>
           <div className="input-box">
             <input type="text" placeholder="Username" required />
@@ -51,11 +50,18 @@ const LoginForm = () => {
             <label>
               <input type="checkbox" /> Remember me
             </label>
-            {/* <a href="#">Forgot password?</a> */}
+            <a href="#">Forgot password?</a> {/*MODIFICAR */}
           </div>
 
           <button type="submit">Login</button>
-
+          <button
+            type="button"
+            className="google-button"
+            aria-label="Login with Google"
+          >
+            <FaGoogle className="google-icon" />
+          </button>
+          
           <div className="signup">
             <p>
               Don't have an account? <a href="/signup">Sign up</a>
