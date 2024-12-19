@@ -6,8 +6,8 @@ import { useLocation } from "react-router-dom";
 const Navbar = () => {
   let location = useLocation();
   let username = "Maria Rosa"; //modificar
-  let avatarUrl = `https://ui-avatars.com/api/?name=${username}&background=fff&color=random&size=55&rounded=true`;
-  
+  let avatarUrl = `https://ui-avatars.com/api/?name=${username}&background=fff&color=000&size=55&rounded=true`;
+
   return (
     <header className="navbar">
       <div className="navbar-container">

@@ -19,11 +19,16 @@ const TripPage = () => {
         <img src={cloud3} alt="cloud" className="cloud cloud3-2" />
         <img src={plane} alt="plane" className="aviao" />
       </div>
-      <div className="all-body"></div>
-       <div className="wrapper-box">
-        <button className="btn"><FaArrowLeft /></button>
-        <button className="btn"><FaArrowRight /></button>
-      </div> 
+      <div className="all-body">
+      <div className="wrapper-box">
+        <button className="btn">
+          <FaArrowLeft />
+        </button>
+        <button className="btn">
+          <FaArrowRight />
+        </button>
+        </div>
+      </div>
     </div>
   );
 };

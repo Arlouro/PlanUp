@@ -24,7 +24,7 @@
   left: 30%;
   transform: translateX(-50%);
   width: 20%;
-  height: 100vh;
+  height: 240vh;
   background-color: #93c9ec;
 }
 
@@ -56,26 +56,25 @@
 }
 
 .coluna-aviao .cloud3 {
-  top: 90%;
-  left: 30%;
-  z-index: 100;
+  top: 110%;
+  left: -5%;
 }
 
 .coluna-aviao .cloud3-2 {
-  top: 90%;
+  top: 150%;
   left: 30%;
   z-index: 100;
 }
 
 .coluna-aviao .cloud1-2 {
-  top: 90%;
-  left: 30%;
+  top: 230%;
+  left: -7%;
   z-index: 100;
 }
 
 .coluna-aviao .cloud2 {
-  top: 90%;
-  left: 30%;
+  top: 190%;
+  left: 10%;
   z-index: 100;
 }
 
