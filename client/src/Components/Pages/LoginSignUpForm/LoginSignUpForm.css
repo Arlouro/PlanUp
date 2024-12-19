@@ -151,7 +151,7 @@ h1{
 
   .google-icon {
     color: white;
-    font-size: 10px;
+    font-size: 12px;
   }
 
 .wrapper .remember{
@@ -192,8 +192,8 @@ h1{
 }
 
 .wrapper .google-button {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     border: none;
     border-radius: 50%;
     background-color: #93C9EC;
