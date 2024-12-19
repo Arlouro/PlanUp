@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./NewTrip.css";
 import plane from "../../Assets/png/plane.png";
 import cloud1 from "../../Assets/png/cloud1.png";
@@ -29,6 +29,29 @@ const NewTripForm = () => {
     setIconPickerOpen(false);
   };
 
+    const [planePosition, setPlanePosition] = useState(-2);
+  
+    useEffect(() => {
+      const handleScroll = () => {
+        const scrollTop = window.scrollY; 
+        const docHeight = document.documentElement.scrollHeight; 
+        const windowHeight = window.innerHeight; 
+  
+        const scrollableHeight = docHeight - windowHeight;
+        const scrollPercentage = scrollTop / scrollableHeight;
+   
+        const newPlanePosition = scrollPercentage * 100;
+        setPlanePosition(newPlanePosition);
+      };
+  
+      window.addEventListener("scroll", handleScroll);
+  
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+      };
+    }, []);
+  
+
   return (
     <div className="containerTP">
       <div className="coluna-aviao">
@@ -38,7 +61,7 @@ const NewTripForm = () => {
         <img src={cloud2} alt="cloud" className="cloud cloud2-2" />
         <img src={cloud3} alt="cloud" className="cloud cloud3" />
         <img src={cloud3} alt="cloud" className="cloud cloud3-2" />
-        <img src={plane} alt="plane" className="aviao" />
+        <img src={plane} alt="plane" className="aviao" style={{ top: `${planePosition}vh` }}/>
       </div>
       <div className="all-body">
         <form>
