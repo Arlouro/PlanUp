@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-let db; // This is the shared database instance
+let db;
 
 export const connectDB = async (mongoURI) => {
     if (!mongoURI) {

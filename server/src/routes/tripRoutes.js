@@ -1,22 +1,22 @@
 import express from 'express';
 import { createTrip, getTrips, deleteTrip, updateTrip, deleteAllTrips } from '../controllers/tripController.js';
-import { createActivity, getActivitiesByDay, updateActivity, deleteActivity } from '../controllers/activityController.js';
+import { createActivity, getActivitiesByDay, updateActivity, deleteActivity, voteActivity, updateActivityState, getActivitiesByState, deleteAllActivities } from '../controllers/activityController.js';
+import { isAuthenticated } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 // Trips routes
-router.get('/', getTrips);
-router.post('/', createTrip);
-router.delete('/:id', deleteTrip);
-router.put('/:id', updateTrip);
-
-//! Remove this route before final delivery
-router.delete('/', deleteAllTrips);
+router.get('/', isAuthenticated, getTrips);
+router.post('/', isAuthenticated, createTrip);
+router.delete('/:id', isAuthenticated, deleteTrip);
+router.put('/:id', isAuthenticated, updateTrip);
 
 // Activities routes
-router.get('/:tripId/:dayId/', getActivitiesByDay);
-router.post('/:tripId/:dayId/', createActivity);
-router.put('/:tripId/:dayId/:activityId', updateActivity);
-router.delete('/:tripId/:dayId/:activityId', deleteActivity);
+router.get('/:tripId/:dayId/', isAuthenticated, getActivitiesByDay);
+router.post('/:tripId/:dayId/', isAuthenticated, createActivity);
+router.put('/:tripId/:dayId/:activityId', isAuthenticated, updateActivity);
+router.delete('/:tripId/:dayId/:activityId', isAuthenticated, deleteActivity);
+router.put('/:tripId/:dayId/:activityId/vote', isAuthenticated, voteActivity);
+router.get('/:tripId/:', isAuthenticated, getActivitiesByState);
 
 export default router;
