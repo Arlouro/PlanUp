@@ -5,7 +5,6 @@ import cloud1 from "../../Assets/png/cloud1.png";
 import cloud2 from "../../Assets/png/cloud2.png";
 import cloud3 from "../../Assets/png/cloud3.png";
 
-
 const HomePage = () => {
   return (
     <div className="containerHP">

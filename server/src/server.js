@@ -32,7 +32,7 @@ app.use(passport.session());
 
 // Routes ---------<
 app.use('/api/trips', tripRoutes);
-app.use('/api', authRoutes);
+app.use('/', authRoutes);
 
 // Start server ---------<
 const startServer = async () => {
