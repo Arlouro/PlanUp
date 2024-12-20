@@ -8,7 +8,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowRight } from "react-icons/fa";
 
 const TripPage = () => {
- 
+
   const [planePosition, setPlanePosition] = useState(-2);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const TripPage = () => {
 
       const scrollableHeight = docHeight - windowHeight;
       const scrollPercentage = scrollTop / scrollableHeight;
- 
+
       const newPlanePosition = scrollPercentage * 100;
       setPlanePosition(newPlanePosition);
     };
@@ -31,7 +31,7 @@ const TripPage = () => {
     };
   }, []);
 
- 
+
   return (
     <div className="containerTP">
       <div className="coluna-aviao">

@@ -3,6 +3,8 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { getDB } from './config/db.js';
 import config from './config/env.js';
 
+const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
+
 passport.serializeUser((user, done) => {
   done(null, user._id);
 });
@@ -22,7 +24,8 @@ passport.use(
     {
       clientID: config.googleClientId,
       clientSecret: config.googleClientSecret,
-      callbackURL: '/auth/google/callback',
+      callbackURL: `${BASE_URL}/auth/google/callback`,
+      proxy: true  
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -53,3 +56,5 @@ passport.use(
     }
   )
 );
+
+export default passport;

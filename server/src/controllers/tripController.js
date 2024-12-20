@@ -1,5 +1,6 @@
 import { getDB } from '../config/db.js';
 import { ObjectId } from 'mongodb';
+import { eachDayOfInterval, parseISO } from 'date-fns';
 
 // Fetching -----------------<
 export const getTrips = async (request, response) => {
@@ -21,65 +22,64 @@ export const getTrips = async (request, response) => {
 
 // Creation -----------------<
 export const createTrip = async (request, response) => {
-    console.log("Request body:", request.body);
-    
-    const { name, description, days, creator, participants } = request.body;
+    const { 
+        name, 
+        description, 
+        destination,
+        startDate, 
+        endDate, 
+        icon,
+        participants 
+    } = request.body;
 
-    if (!name) {
-        return response.status(400).json({ message: 'Name is required' });
+    const creator = request.user._id;
+
+    console.log("Incoming data:", request.body); 
+    console.log("Creator ID:", request.user);
+
+
+    if (!name || !startDate || !endDate || !destination) {
+        return response.status(400).json({ 
+            message: 'Name, destination, start date and end date are required' 
+        });
     }
-
-    if (!days || !Array.isArray(days) || days.length === 0) {
-        return response.status(400).json({ message: 'At least one day is required' });
-    }
-
-    const tripParticipants = (participants && Array.isArray(participants) && participants.length > 0) 
-        ? participants 
-        : [creator];
-
-    console.log("Participants used:", tripParticipants);
-
-    days.forEach((day, index) => {
-        if (!day.date) {
-            console.log(`Day at index ${index} is missing a date:`, day);
-        }
-    });
 
     try {
         const db = getDB();
 
-        const tripDays = days.map((day, index) => {
-            if (!day.date) {
-                throw new Error(`Day at index ${index} is missing a date.`);
-            }
-            return {
-                id: index + 1,
-                date: day.date,
-                activities: [],
-            };
-        });
-
-        console.log("Mapped trip days:", tripDays);
+        const days = eachDayOfInterval({
+            start: parseISO(startDate),
+            end: parseISO(endDate)
+        }).map((date, index) => ({
+            id: index + 1,
+            date: date.toISOString().split('T')[0],
+            activities: []
+        }));
 
         const newTrip = {
             name,
             description,
-            participants: tripParticipants,
+            destination,
+            icon,
+            startDate,
+            endDate,
+            participants: participants || [creator],
             creator,
-            days: tripDays,
-            createdAt: new Date(),
+            days,
+            createdAt: new Date()
         };
 
-        console.log("New trip object:", newTrip);
-
         const result = await db.collection('trips').insertOne(newTrip);
-
         const insertedTrip = { ...newTrip, _id: result.insertedId };
 
+        await db.collection('users').updateOne(
+            { _id: creator },
+            { $push: { trips: result.insertedId } }
+        );
+
         response.status(201).json(insertedTrip);
-        console.log('Trip created successfully:', insertedTrip);
     } catch (err) {
-        console.error('Error creating trip:', err.message, err.stack);
+        console.error('Error creating trip:', err);
         response.status(500).json({ message: 'Server error' });
     }
 };

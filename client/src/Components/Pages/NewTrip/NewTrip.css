@@ -194,3 +194,35 @@
     background-size: contain;
   }
 }
+
+.popup {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  text-align: center;
+}
+
+.popup.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.popup.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.popup button {
+  margin-top: 10px;
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+

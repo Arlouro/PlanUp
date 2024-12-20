@@ -24,43 +24,64 @@ export const getActivitiesByDay = async (request, response) => {
 // Creation -----------------<
 export const createActivity = async (request, response) => {
     const { tripId, dayId } = request.params;
-    const { location, time, description, state } = request.body;
+    const { 
+        description,
+        time,
+        price,
+        isFree,
+        location,
+        duration 
+    } = request.body;
 
-    if (!tripId || !dayId || !location || !time || !description) {
-        return response.status(400).json({ message: 'Required fields are missing' });
+    if (!tripId || !dayId || !description || !time || !location) {
+        return response.status(400).json({ 
+            message: 'Trip ID, day ID, description, time, and location are required' 
+        });
     }
 
     try {
         const db = getDB();
+        
+        const [hour, minute] = time.split(':');
 
         const newActivity = {
             activityId: new ObjectId(),
             tripId,
             dayId,
-            location,
-            time,
             description,
+            time,
+            hour,
+            minute,
+            price: isFree ? "0" : price,
+            isFree,
+            location,
+            duration,
             state: 'pending',
             votes: { positive: 0, negative: 0 },
-            createdAt: new Date(),
+            createdAt: new Date()
         };
 
         const result = await db.collection('activities').insertOne(newActivity);
-
         newActivity._id = result.insertedId;
 
         const tripUpdateResult = await db.collection('trips').updateOne(
-            { _id: new ObjectId(tripId), 'days.id': parseInt(dayId) },
-            { $push: { 'days.$.activities': newActivity } }
+            { 
+                _id: new ObjectId(tripId), 
+                'days.id': parseInt(dayId) 
+            },
+            { 
+                $push: { 'days.$.activities': newActivity }
+            }
         );
 
         if (tripUpdateResult.modifiedCount === 0) {
+            await db.collection('activities').deleteOne({ _id: newActivity._id });
             return response.status(404).json({ message: 'Trip or day not found' });
         }
 
         response.status(201).json({
-            message: 'Activity created and trip updated successfully',
-            activity: newActivity,
+            message: 'Activity created successfully',
+            activity: newActivity
         });
 
     } catch (err) {

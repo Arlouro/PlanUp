@@ -1,8 +1,9 @@
 const API_URL = 'http://localhost:5000/api';
+const GOOGLE_URL = 'http://localhost:5000/auth/google';
 
 export const authAPI = {
   loginWithGoogle: () => {
-    window.location.href = `${API_URL}/auth/google`;
+    window.location.href = `${GOOGLE_URL}`;
   },
 
   logout: async () => {
