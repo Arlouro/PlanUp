@@ -34,8 +34,8 @@ export const createTrip = async (request, response) => {
 
     const creator = request.user._id;
 
-    console.log("Incoming data:", request.body); // Log the incoming data
-    console.log("Creator ID:", request.user); // Check if user is correctly attached
+    console.log("Incoming data:", request.body); 
+    console.log("Creator ID:", request.user);
 
 
     if (!name || !startDate || !endDate || !destination) {

@@ -64,7 +64,6 @@ export const createActivity = async (request, response) => {
         const result = await db.collection('activities').insertOne(newActivity);
         newActivity._id = result.insertedId;
 
-        // Update the trip's day with the new activity
         const tripUpdateResult = await db.collection('trips').updateOne(
             { 
                 _id: new ObjectId(tripId), 
