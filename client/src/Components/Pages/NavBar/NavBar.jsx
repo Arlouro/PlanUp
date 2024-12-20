@@ -1,16 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./NavBar.css";
 import { useLocation } from "react-router-dom";
+import { authAPI } from "../../../services/api";
 
 const Navbar = () => {
-  let location = useLocation();
-  let username = "Maria Rosa"; // Replace with dynamic username if needed
-  let avatarUrl = `https://ui-avatars.com/api/?name=${username}&background=fff&color=000&size=55&rounded=true`;
+  const [user, setUser] = useState(null);
+  const location = useLocation();
 
-  const handleSignOut = () => {
-    // Replace with actual sign-out logic (e.g., clearing tokens, API calls)
-    window.location.href = "/login";
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/user', {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const userData = await response.json();
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
+  const handleSignOut = async () => {
+    try {
+      const success = await authAPI.logout();
+      if (success) {
+        window.location.href = "/login";
+      }
+    } catch (error) {
+      console.error('Failed to sign out:', error);
+    }
   };
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <header className="navbar">
@@ -31,10 +59,14 @@ const Navbar = () => {
           )}
         </nav>
         <div className="usersection">
-          <span className="username">{username}</span>
+          <span className="username">{user.name}</span>
           <details className="dropdown">
             <summary role="button" className="usericon-wrapper">
-              <img src={avatarUrl} alt={username} className="usericon" />
+              <img 
+                src={user.avatar || `https://ui-avatars.com/api/?name=${user.name}&background=fff&color=000&size=55&rounded=true`}
+                alt={user.name} 
+                className="usericon" 
+              />
             </summary>
             <ul>
               <li>
