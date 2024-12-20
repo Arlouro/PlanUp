@@ -30,12 +30,20 @@ router.get('/auth/google/callback',
   }
 );
 
-router.get('/logout', (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      console.error('Error logging out:', err);
-    }
-    res.redirect('/');
+router.post('/logout', (req, res) => {
+  req.logout(err => {
+      if (err) {
+          console.error('Error logging out:', err);
+          return res.status(500).json({ success: false, message: 'Logout failed' });
+      }
+      req.session.destroy(sessionErr => {
+          if (sessionErr) {
+              console.error('Error destroying session:', sessionErr);
+              return res.status(500).json({ success: false, message: 'Failed to destroy session' });
+          }
+          res.clearCookie('connect.sid');
+          return res.status(200).json({ success: true, message: 'Logged out successfully' });
+      });
   });
 });
 
