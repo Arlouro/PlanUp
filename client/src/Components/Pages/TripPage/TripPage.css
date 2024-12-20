@@ -1,10 +1,11 @@
 .containerTP {
-  background-color: #fff;
+  background-color: #f9f9f9;
   height: 100%;
   width: 100%;
   min-width: 100vw;
   display: flex;
   justify-content: center;
+  padding: 20px;
 }
 
 .coluna-aviao {
@@ -25,7 +26,7 @@
   transform: translateX(-50%);
   width: 20%;
   height: 240vh;
-  background-color: #93c9ec;
+  background-color: #e0f7fa;
 }
 
 .coluna-aviao .aviao {
@@ -34,7 +35,7 @@
   position: fixed;
   top: 30%;
   left: 4.4%;
-  transform: translateX(-50%) rotate(180deg);
+  transform: translateX(-34%) rotate(180deg);
   overflow: hidden;
 }
 
@@ -90,10 +91,11 @@
   display: flex;
   align-items: center;
   border: 1px solid #ddd;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
-  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   justify-content: space-between;
   overflow: hidden;
+  background-color: #fff;
 }
 
 .wrapper-box .btn {
@@ -101,9 +103,9 @@
   color: #999;
   border: none;
   margin: 0 5px;
-  width: 20px;
-  height: 20px;
-  box-shadow: 0 0 10px #999;
+  width: 30px;
+  height: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   cursor: pointer;
   z-index: 1;
@@ -123,6 +125,10 @@
   transform: translateY(-50%);
 }
 
+.wrapper-box .btn:hover {
+  background-color: #f0f0f0;
+}
+
 .trips-carousel {
   display: flex;
   align-items: center;
@@ -140,7 +146,7 @@
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease;
   position: absolute;
   opacity: 0;
   pointer-events: none;
@@ -205,5 +211,5 @@
 }
 
 .vote-buttons button:hover {
-  background-color: #f0f0f0;
-} 
+  background-color: #e0e0e0;
+}

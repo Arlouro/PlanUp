@@ -13,6 +13,7 @@ const TripPage = () => {
   const [currentTripIndex, setCurrentTripIndex] = useState(0);
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [activities, setActivities] = useState([]);
+  const [newActivity, setNewActivity] = useState({ name: "", description: "" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -48,7 +49,9 @@ const TripPage = () => {
   const handleTripSelect = async (trip) => {
     try {
       const activitiesData = await Promise.all(
-        trip.days.map(dayId => activitiesAPI.getActivitiesByDay(trip.id, dayId))
+        trip.days.map((dayId) =>
+          activitiesAPI.getActivitiesByDay(trip.id, dayId)
+        )
       );
       setSelectedTrip(trip);
       setActivities(activitiesData.flat());
@@ -58,13 +61,13 @@ const TripPage = () => {
   };
 
   const handleNext = () => {
-    setCurrentTripIndex((prev) => 
+    setCurrentTripIndex((prev) =>
       prev === trips.length - 1 ? 0 : prev + 1
     );
   };
 
   const handlePrev = () => {
-    setCurrentTripIndex((prev) => 
+    setCurrentTripIndex((prev) =>
       prev === 0 ? trips.length - 1 : prev - 1
     );
   };
@@ -74,7 +77,7 @@ const TripPage = () => {
       await activitiesAPI.voteActivity(tripId, dayId, activityId, vote);
       if (selectedTrip) {
         const updatedActivities = await Promise.all(
-          selectedTrip.days.map(dayId => 
+          selectedTrip.days.map((dayId) =>
             activitiesAPI.getActivitiesByDay(selectedTrip.id, dayId)
           )
         );
@@ -82,6 +85,26 @@ const TripPage = () => {
       }
     } catch (err) {
       setError("Failed to submit vote");
+    }
+  };
+
+  const handleAddActivity = async () => {
+    if (!newActivity.name || !newActivity.description) {
+      setError("Activity name and description are required");
+      return;
+    }
+    try {
+      await activitiesAPI.addActivity(selectedTrip.id, {
+        ...newActivity,
+        status: "pending",
+      });
+      setNewActivity({ name: "", description: "" });
+      const updatedActivities = await activitiesAPI.getActivitiesByTrip(
+        selectedTrip.id
+      );
+      setActivities(updatedActivities);
+    } catch (err) {
+      setError("Failed to add activity");
     }
   };
 
@@ -97,10 +120,10 @@ const TripPage = () => {
         <img src={cloud2} alt="cloud" className="cloud cloud2-2" />
         <img src={cloud3} alt="cloud" className="cloud cloud3" />
         <img src={cloud3} alt="cloud" className="cloud cloud3-2" />
-        <img 
-          src={plane} 
-          alt="plane" 
-          className="aviao" 
+        <img
+          src={plane}
+          alt="plane"
+          className="aviao"
           style={{ top: `${planePosition}vh` }}
         />
       </div>
@@ -111,14 +134,18 @@ const TripPage = () => {
           </button>
           <div className="trips-carousel">
             {trips.map((trip, index) => (
-              <div 
+              <div
                 key={trip.id}
-                className={`trip-card ${index === currentTripIndex ? 'active' : ''}`}
+                className={`trip-card ${
+                  index === currentTripIndex ? "active" : ""
+                }`}
                 onClick={() => handleTripSelect(trip)}
               >
                 <img src={trip.thumbnail} alt={trip.destination} />
                 <h3>{trip.destination}</h3>
-                <p>{trip.startDate} - {trip.endDate}</p>
+                <p>
+                  {trip.startDate} - {trip.endDate}
+                </p>
               </div>
             ))}
           </div>
@@ -133,35 +160,73 @@ const TripPage = () => {
             <p>Location: {selectedTrip.location}</p>
             <p>Start Date: {selectedTrip.startDate}</p>
             <p>End Date: {selectedTrip.endDate}</p>
-            
+            <p>Description: {selectedTrip.description}</p>
+
+            <div className="add-activity-form">
+              <h3>Add New Activity</h3>
+              <input
+                type="text"
+                placeholder="Activity Name"
+                value={newActivity.name}
+                onChange={(e) =>
+                  setNewActivity((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }))
+                }
+              />
+              <textarea
+                placeholder="Activity Description"
+                value={newActivity.description}
+                onChange={(e) =>
+                  setNewActivity((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+              ></textarea>
+              <button onClick={handleAddActivity}>Add Activity</button>
+            </div>
+
             <div className="activities-section">
               <h3>Activities</h3>
-              {activities.map(activity => (
-                <div key={activity.id} className="activity-card">
+              {activities.map((activity) => (
+                <div
+                  key={activity.id}
+                  className={`activity-card ${
+                    activity.status === "pending" ? "pending" : ""
+                  }`}
+                >
                   <h4>{activity.name}</h4>
                   <p>{activity.description}</p>
-                  <div className="vote-buttons">
-                    <button
-                      onClick={() => handleVote(
-                        selectedTrip.id,
-                        activity.dayId,
-                        activity.id,
-                        'up'
-                      )}
-                    >
-                      👍 {activity.upvotes}
-                    </button>
-                    <button
-                      onClick={() => handleVote(
-                        selectedTrip.id,
-                        activity.dayId,
-                        activity.id,
-                        'down'
-                      )}
-                    >
-                      👎 {activity.downvotes}
-                    </button>
-                  </div>
+                  {activity.status === "pending" && (
+                    <div className="vote-buttons">
+                      <button
+                        onClick={() =>
+                          handleVote(
+                            selectedTrip.id,
+                            activity.dayId,
+                            activity.id,
+                            "up"
+                          )
+                        }
+                      >
+                        👍 {activity.upvotes}
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleVote(
+                            selectedTrip.id,
+                            activity.dayId,
+                            activity.id,
+                            "down"
+                          )
+                        }
+                      >
+                        👎 {activity.downvotes}
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
