@@ -47,10 +47,10 @@ const AddActivityCard = ({ trip, onActivityAdded }) => {
         time: formattedTime,
         status: "pending",
       };
-
+      
       const response = await activitiesAPI.createActivity(
-        trip.id,
-        selectedDay,
+        trip._id,
+        selectedDay.id,
         newActivity
       );
 

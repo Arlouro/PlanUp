@@ -14,7 +14,6 @@ const TripPage = () => {
   const [currentTripIndex, setCurrentTripIndex] = useState(0);
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [activities, setActivities] = useState([]);
-  const [newActivity, setNewActivity] = useState({ name: "", description: "" });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -51,7 +50,7 @@ const TripPage = () => {
     try {
       const activitiesData = await Promise.all(
         trip.days.map((dayId) =>
-          activitiesAPI.getActivitiesByDay(trip.id, dayId)
+          activitiesAPI.getActivitiesByDay(trip._id, dayId)
         )
       );
       setSelectedTrip(trip);
@@ -75,7 +74,7 @@ const TripPage = () => {
       if (selectedTrip) {
         const updatedActivities = await Promise.all(
           selectedTrip.days.map((dayId) =>
-            activitiesAPI.getActivitiesByDay(selectedTrip.id, dayId)
+            activitiesAPI.getActivitiesByDay(selectedTrip._id, dayId)
           )
         );
         setActivities(updatedActivities.flat());
@@ -112,7 +111,7 @@ const TripPage = () => {
           <div className="trips-carousel" id="trip-go">
             {trips.map((trip, index) => (
               <div
-                key={trip.id}
+                key={trip._id}
                 className={`trip-card ${
                   index === currentTripIndex ? "active" : ""
                 }`}
@@ -148,7 +147,7 @@ const TripPage = () => {
               onActivityAdded={async (newActivity) => {
                 const updatedActivities = await Promise.all(
                   selectedTrip.days.map((dayId) =>
-                    activitiesAPI.getActivitiesByDay(selectedTrip.id, dayId)
+                    activitiesAPI.getActivitiesByDay(selectedTrip._id, dayId)
                   )
                 );
                 setActivities(updatedActivities.flat());
