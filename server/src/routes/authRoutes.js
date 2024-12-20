@@ -10,14 +10,23 @@ router.get('/auth/google/callback',
     failureRedirect: `http://localhost:3000/login`,
     session: true 
   }),
-  (request, response) => {
-    response.send(`
-      <html>
-        <script>
-          window.location.href = 'http://localhost:3000/mytrip';
-        </script>
-      </html>
-    `);
+  (req, res) => {
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.redirect('http://localhost:3000/login');
+      }
+      console.log('Session after Google auth:', req.session);
+      console.log('User after Google auth:', req.user);
+      
+      res.send(`
+        <html>
+          <script>
+            window.location.href = 'http://localhost:3000/mytrip';
+          </script>
+        </html>
+      `);
+    });
   }
 );
 
@@ -28,6 +37,20 @@ router.get('/logout', (req, res) => {
     }
     res.redirect('/');
   });
+});
+
+router.get('/api/user', (req, res) => {
+  console.log('User request received');
+  console.log('Session:', req.session);
+  console.log('User in request:', req.user);
+  
+  if (!req.user) {
+    console.log('No user found in request');
+    return res.status(401).json({ error: 'Not authenticated' });
+  }
+  
+  const { googleId, email, ...userData } = req.user;
+  res.json(userData);
 });
 
 export default router;

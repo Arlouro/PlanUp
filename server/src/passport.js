@@ -1,20 +1,25 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { ObjectId } from 'mongodb';
 import { getDB } from './config/db.js';
 import config from './config/env.js';
 
 const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
 
 passport.serializeUser((user, done) => {
-  done(null, user._id);
+  console.log('Serializing user:', user);
+  done(null, user._id.toString());
 });
 
 passport.deserializeUser(async (id, done) => {
+  console.log('Deserializing ID:', id);
   try {
     const db = getDB();
-    const user = await db.collection('users').findOne({ _id: id });
+    const user = await db.collection('users').findOne({ _id: new ObjectId(id) });
+    console.log('Deserialized user:', user);
     done(null, user);
   } catch (err) {
+    console.error('Deserialize error:', err);
     done(err, null);
   }
 });
@@ -25,9 +30,10 @@ passport.use(
       clientID: config.googleClientId,
       clientSecret: config.googleClientSecret,
       callbackURL: `${BASE_URL}/auth/google/callback`,
-      proxy: true  
+      proxy: true
     },
     async (accessToken, refreshToken, profile, done) => {
+      console.log('Google profile received:', profile.id);
       try {
         const db = getDB();
         const { id, displayName, emails, photos } = profile;
@@ -35,22 +41,24 @@ passport.use(
         let user = await db.collection('users').findOne({ googleId: id });
 
         if (!user) {
-          user = {
+          const result = await db.collection('users').insertOne({
             googleId: id,
             name: displayName,
-            email: emails && emails[0]?.value,
-            avatar: photos && photos[0]?.value,
+            email: emails?.[0]?.value,
+            avatar: photos?.[0]?.value,
             createdAt: new Date(),
-            trips: [],
-          };
-
-          const result = await db.collection('users').insertOne(user);
-          user._id = result.insertedId;
+            trips: []
+          });
+          
+          user = await db.collection('users').findOne({ _id: result.insertedId });
+          console.log('New user created:', user);
+        } else {
+          console.log('Existing user found:', user);
         }
 
         done(null, user);
       } catch (err) {
-        console.error('Error authenticating user:', err);
+        console.error('Google auth error:', err);
         done(err, null);
       }
     }

@@ -11,7 +11,12 @@ import authRoutes from './routes/authRoutes.js';
 const app = express();
 
 // CORS ---------<
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Middleware ---------<
 app.use(express.json());
@@ -21,18 +26,26 @@ app.use(
         resave: false,
         saveUninitialized: true,
         cookie: {
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            secure: false,
+            httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000
         }
     })
 );
+
+app.use((req, res, next) => {
+    console.log('Current session:', req.session);
+    console.log('Current user:', req.user);
+    next();
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes ---------<
-app.use('/api/trips', tripRoutes);
 app.use('/', authRoutes);
+app.use('/api/trips', tripRoutes);
+
 
 // Start server ---------<
 const startServer = async () => {
