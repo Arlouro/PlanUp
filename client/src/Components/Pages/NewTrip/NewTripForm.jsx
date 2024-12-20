@@ -11,10 +11,22 @@ import france from "../../Assets/png/France.png";
 import portugal from "../../Assets/png/Portugal.png";
 import netherland from "../../Assets/png/Netherlands.png";
 import more from "../../Assets/png/plus.png";
+import { tripsAPI } from "../../../services/api";
 
 const NewTripForm = () => {
   const [selectedIcon, setSelectedIcon] = useState(more);
   const [isIconPickerOpen, setIconPickerOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    destination: "",
+    startDate: "",
+    endDate: "",
+    icon: null,
+  });
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState("");
+  const [planePosition, setPlanePosition] = useState(-2);
 
   const icons = [
     { id: 1, src: usa, alt: "USA" },
@@ -24,33 +36,65 @@ const NewTripForm = () => {
     { id: 5, src: netherland, alt: "Netherland" },
   ];
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight;
+      const windowHeight = window.innerHeight;
+
+      const scrollableHeight = docHeight - windowHeight;
+      const scrollPercentage = scrollTop / scrollableHeight;
+
+      const newPlanePosition = scrollPercentage * 100;
+      setPlanePosition(newPlanePosition);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const handleIconSelect = (iconSrc) => {
     setSelectedIcon(iconSrc);
+    setFormData({ ...formData, icon: iconSrc });
     setIconPickerOpen(false);
   };
 
-    const [planePosition, setPlanePosition] = useState(-2);
-  
-    useEffect(() => {
-      const handleScroll = () => {
-        const scrollTop = window.scrollY; 
-        const docHeight = document.documentElement.scrollHeight; 
-        const windowHeight = window.innerHeight; 
-  
-        const scrollableHeight = docHeight - windowHeight;
-        const scrollPercentage = scrollTop / scrollableHeight;
-   
-        const newPlanePosition = scrollPercentage * 100;
-        setPlanePosition(newPlanePosition);
-      };
-  
-      window.addEventListener("scroll", handleScroll);
-  
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-      };
-    }, []);
-  
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (!formData.name || !formData.destination || !formData.startDate || !formData.endDate) {
+        setPopupMessage("All required fields must be filled.");
+        setPopupType("error");
+        return;
+      }
+
+      await tripsAPI.createTrip(formData);
+      setPopupMessage("Trip created successfully!");
+      setPopupType("success");
+
+      // Reset form
+      setFormData({
+        name: "",
+        description: "",
+        destination: "",
+        startDate: "",
+        endDate: "",
+        icon: null,
+      });
+      setSelectedIcon(more);
+    } catch (error) {
+      setPopupMessage("Failed to create trip. Please try again.");
+      setPopupType("error");
+    }
+  };
 
   return (
     <div className="containerTP">
@@ -61,27 +105,22 @@ const NewTripForm = () => {
         <img src={cloud2} alt="cloud" className="cloud cloud2-2" />
         <img src={cloud3} alt="cloud" className="cloud cloud3" />
         <img src={cloud3} alt="cloud" className="cloud cloud3-2" />
-        <img src={plane} alt="plane" className="aviao" style={{ top: `${planePosition}vh` }}/>
+        <img src={plane} alt="plane" className="aviao" style={{ top: `${planePosition}vh` }} />
       </div>
       <div className="all-body">
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="name-icon">
-            <div
-              className="icon-picker"
-              onClick={() => setIconPickerOpen(!isIconPickerOpen)}
-            >
-              <img
-                src={selectedIcon}
-                alt="Selected Icon"
-                width="40"
-                height="40"
-              />
+            <div className="icon-picker" onClick={() => setIconPickerOpen(!isIconPickerOpen)}>
+              <img src={selectedIcon} alt="Selected Icon" width="40" height="40" />
             </div>
 
             <input
               type="text"
+              name="name"
               id="trip-name"
               placeholder="Trip Name"
+              value={formData.name}
+              onChange={handleInputChange}
               required
             />
           </div>
@@ -101,53 +140,56 @@ const NewTripForm = () => {
             </div>
           )}
           <div className="input-create-box">
-            <input type="text" placeholder="Add Description" />
+            <input
+              type="text"
+              name="description"
+              placeholder="Add Description"
+              value={formData.description}
+              onChange={handleInputChange}
+            />
           </div>
           <div className="input-create-box">
-            <input type="text" placeholder="Add Destination" required />
+            <input
+              type="text"
+              name="destination"
+              placeholder="Add Destination"
+              value={formData.destination}
+              onChange={handleInputChange}
+              required
+            />
           </div>
           <div className="input-create-box">
-            <input type="date" placeholder="Start Date" required />
+            <input
+              type="date"
+              name="startDate"
+              placeholder="Start Date"
+              value={formData.startDate}
+              onChange={handleInputChange}
+              required
+            />
           </div>
           <div className="input-create-box">
-            <input type="date" placeholder="End Date" required />
+            <input
+              type="date"
+              name="endDate"
+              placeholder="End Date"
+              value={formData.endDate}
+              onChange={handleInputChange}
+              required
+            />
           </div>
-          <form className="add-activity-container">
-            <h2 className="title">Adding Activity</h2>
-            <div className="add-sub-container">
-              <div className="left-section">
-                <input type="text" placeholder="activity name" required />
-                <div className="hour-price-container">
-                  <div className="hour-container">
-                    <input type="text" placeholder="" name="hour" />:{" "}
-                    <input type="text" placeholder="" name="minute" />H
-                  </div>
-
-                  <div className="price-container">
-                    <input type="text" placeholder="price" />
-
-                    <div className="price-checkbox">
-                      <label htmlFor="free">Free</label>
-                      <input type="checkbox" id="free" name="free" />
-                    </div>
-                  </div>
-                </div>
-                <input type="text" placeholder="location" required />
-                <input type="text" placeholder="duration" />
-              </div>
-              <div className="right-section">
-                <img src={mapa} alt="" className="mapa" />
-              </div>
-            </div>
-            <button id="add-activity-btn" type="submit">
-              Add Activity
-            </button>
-          </form>
           <button id="create-btn" type="submit">
             Create Trip
           </button>
         </form>
       </div>
+
+      {popupMessage && (
+        <div className={`popup ${popupType}`}>
+          <p>{popupMessage}</p>
+          <button onClick={() => setPopupMessage("")}>Close</button>
+        </div>
+      )}
     </div>
   );
 };
