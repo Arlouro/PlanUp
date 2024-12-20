@@ -6,6 +6,7 @@ import cloud2 from "../../Assets/png/cloud2.png";
 import cloud3 from "../../Assets/png/cloud3.png";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { tripsAPI, activitiesAPI } from "../../../services/api";
+import AddActivityCard from "../../AddActivityCard/AddActivityCard";
 
 const TripPage = () => {
   const [planePosition, setPlanePosition] = useState(-2);
@@ -88,26 +89,6 @@ const TripPage = () => {
     }
   };
 
-  const handleAddActivity = async () => {
-    if (!newActivity.name || !newActivity.description) {
-      setError("Activity name and description are required");
-      return;
-    }
-    try {
-      await activitiesAPI.addActivity(selectedTrip.id, {
-        ...newActivity,
-        status: "pending",
-      });
-      setNewActivity({ name: "", description: "" });
-      const updatedActivities = await activitiesAPI.getActivitiesByTrip(
-        selectedTrip.id
-      );
-      setActivities(updatedActivities);
-    } catch (err) {
-      setError("Failed to add activity");
-    }
-  };
-
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -162,73 +143,63 @@ const TripPage = () => {
             <p>End Date: {selectedTrip.endDate}</p>
             <p>Description: {selectedTrip.description}</p>
 
-            <div className="add-activity-form">
-              <h3>Add New Activity</h3>
-              <input
-                type="text"
-                placeholder="Activity Name"
-                value={newActivity.name}
-                onChange={(e) =>
-                  setNewActivity((prev) => ({
-                    ...prev,
-                    name: e.target.value,
-                  }))
-                }
-              />
-              <textarea
-                placeholder="Activity Description"
-                value={newActivity.description}
-                onChange={(e) =>
-                  setNewActivity((prev) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
-                }
-              ></textarea>
-              <button onClick={handleAddActivity}>Add Activity</button>
-            </div>
+            <AddActivityCard 
+              trip={selectedTrip} 
+              onActivityAdded={async (newActivity) => {
+                const updatedActivities = await Promise.all(
+                  selectedTrip.days.map((dayId) =>
+                    activitiesAPI.getActivitiesByDay(selectedTrip.id, dayId)
+                  )
+                );
+                setActivities(updatedActivities.flat());
+              }}
+            />
 
             <div className="activities-section">
               <h3>Activities</h3>
-              {activities.map((activity) => (
-                <div
-                  key={activity.id}
-                  className={`activity-card ${
-                    activity.status === "pending" ? "pending" : ""
-                  }`}
-                >
-                  <h4>{activity.name}</h4>
-                  <p>{activity.description}</p>
-                  {activity.status === "pending" && (
-                    <div className="vote-buttons">
-                      <button
-                        onClick={() =>
-                          handleVote(
-                            selectedTrip.id,
-                            activity.dayId,
-                            activity.id,
-                            "up"
-                          )
-                        }
-                      >
-                        👍 {activity.upvotes}
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleVote(
-                            selectedTrip.id,
-                            activity.dayId,
-                            activity.id,
-                            "down"
-                          )
-                        }
-                      >
-                        👎 {activity.downvotes}
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ))}
+              {activities
+                .filter(activity => activity.tripId === selectedTrip.id)
+                .map((activity) => (
+                  <div
+                    key={activity.id}
+                    className={`activity-card ${
+                      activity.status === "pending" ? "pending" : ""
+                    }`}
+                  >
+                    <h4>{activity.name}</h4>
+                    <p>{activity.description}</p>
+                    {activity.status === "pending" && (
+                      <div className="vote-buttons">
+                        <>
+                          <button
+                            onClick={() =>
+                              handleVote(
+                                selectedTrip.id,
+                                activity.dayId,
+                                activity.id,
+                                "up"
+                              )
+                            }
+                          >
+                            👍 {activity.upvotes}
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleVote(
+                                selectedTrip.id,
+                                activity.dayId,
+                                activity.id,
+                                "down"
+                              )
+                            }
+                          >
+                            👎 {activity.downvotes}
+                          </button>
+                        </>
+                      </div>
+                    )}
+                  </div>
+                ))}
             </div>
           </div>
         )}

@@ -1,0 +1,98 @@
+:root {
+  --background-color: #f9f9f9;
+  --border-color: #e0e0e0;
+  --box-shadow-color: rgba(0, 0, 0, 0.1);
+  --hover-box-shadow-color: rgba(0, 0, 0, 0.2);
+  --header-color: #222;
+  --body-color: #555;
+  --button-bg-color: #28a745;
+  --button-hover-bg-color: #218838;
+  --selected-bg-color: #007bff;
+  --selected-border-color: #007bff;
+  --selected-color: white;
+}
+
+.add-activity-card {
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px var(--box-shadow-color);
+  padding: 20px;
+  margin: 20px;
+  max-width: 450px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.add-activity-card:hover {
+  box-shadow: 0 8px 16px var(--hover-box-shadow-color);
+  transform: translateY(-5px);
+}
+
+.add-activity-card-header {
+  font-size: 1.75em;
+  margin-bottom: 12px;
+  color: var(--header-color);
+  font-weight: bold;
+}
+
+.add-activity-card-body {
+  font-size: 1.1em;
+  color: var(--body-color);
+  line-height: 1.6;
+}
+
+.add-activity-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.add-activity-card-button {
+  background-color: var(--button-bg-color);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.add-activity-card-button:hover {
+  background-color: var(--button-hover-bg-color);
+  transform: scale(1.05);
+}
+
+.add-activity-card-button:focus {
+  outline: 2px solid var(--button-hover-bg-color);
+  outline-offset: 2px;
+}
+
+.day-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.day-button {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  background-color: var(--background-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.day-button:hover {
+  background-color: #eee;
+}
+
+.day-button.selected {
+  background-color: var(--selected-bg-color);
+  color: var(--selected-color);
+  border-color: var(--selected-border-color);
+}
+
+.day-button:focus {
+  outline: 2px solid var(--selected-bg-color);
+  outline-offset: 2px;
+}

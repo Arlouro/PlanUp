@@ -50,8 +50,6 @@ export const createActivity = async (request, response) => {
             dayId,
             description,
             time,
-            hour,
-            minute,
             price: isFree ? "0" : price,
             isFree,
             location,
