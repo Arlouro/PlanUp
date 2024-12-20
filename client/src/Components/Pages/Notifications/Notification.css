@@ -1,0 +1,12 @@
+.containerN {
+    background-color: #fff;
+    height: 100%;
+    width: 100%;
+    min-width: 100vw;
+    display: flex;
+    justify-content: center;
+  }
+
+  .notification-body {
+    width: 100%;
+  }
