@@ -1,0 +1,114 @@
+:root {
+  --secondary-bg: #f4f4f9;
+  --primary-text: #607B97;
+  --secondary-text: #93C0EC;
+  --accent-color: #CCD5AE;
+  --accent-hover: #CCD5AE;
+  --error-color: #FDAEAE;
+  --button-bg: var(--accent-color);
+  --button-hover-bg: var(--accent-hover);
+}
+
+.add-activity-card {
+  background: var(--primary-bg);
+  border: 1px solid #93C0EC;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 500px;
+  margin: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  text-align: center;
+  color: #607B97;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  color: var(--error-color);
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #93C0EC;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--accent-color);
+  outline: none;
+}
+
+.textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.time-inputs {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.time-input {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.day-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 0.5rem;
+}
+
+.day-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #93C0EC;
+  border-radius: 6px;
+  background: var(--secondary-bg);
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.day-button.selected {
+  background: var(--accent-color);
+  color: white;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--button-bg);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background: var(--button-hover-bg);
+}

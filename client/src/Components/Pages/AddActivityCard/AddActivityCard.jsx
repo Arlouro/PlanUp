@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { activitiesAPI } from "../../services/api";
+import { activitiesAPI } from "../../../services/api";
 import "./AddActivityCard.css";
 
 const AddActivityCard = ({ trip, onActivityAdded }) => {
@@ -30,7 +30,10 @@ const AddActivityCard = ({ trip, onActivityAdded }) => {
 
     const formattedTime =
       activityData.hours && activityData.minutes
-        ? `${activityData.hours.padStart(2, "0")}:${activityData.minutes.padStart(2, "0")}`
+        ? `${activityData.hours.padStart(
+            2,
+            "0"
+          )}:${activityData.minutes.padStart(2, "0")}`
         : "";
 
     try {
@@ -86,7 +89,9 @@ const AddActivityCard = ({ trip, onActivityAdded }) => {
               {trip.days.map((day, index) => (
                 <button
                   key={index}
-                  className={`day-button ${selectedDay === day ? "selected" : ""}`}
+                  className={`day-button ${
+                    selectedDay === day ? "selected" : ""
+                  }`}
                   onClick={() => setSelectedDay(day)}
                 >
                   Day {index + 1}
@@ -152,7 +157,10 @@ const AddActivityCard = ({ trip, onActivityAdded }) => {
             placeholder="Description"
             value={activityData.description}
             onChange={(e) =>
-              setActivityData((prev) => ({ ...prev, description: e.target.value }))
+              setActivityData((prev) => ({
+                ...prev,
+                description: e.target.value,
+              }))
             }
             className="textarea"
           ></textarea>

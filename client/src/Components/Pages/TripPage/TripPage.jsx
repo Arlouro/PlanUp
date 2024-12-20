@@ -6,7 +6,7 @@ import cloud2 from "../../Assets/png/cloud2.png";
 import cloud3 from "../../Assets/png/cloud3.png";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { tripsAPI, activitiesAPI } from "../../../services/api";
-import AddActivityCard from "../../AddActivityCard/AddActivityCard";
+import AddActivityCard from "../AddActivityCard/AddActivityCard";
 
 const TripPage = () => {
   const [planePosition, setPlanePosition] = useState(-2);
@@ -62,15 +62,11 @@ const TripPage = () => {
   };
 
   const handleNext = () => {
-    setCurrentTripIndex((prev) =>
-      prev === trips.length - 1 ? 0 : prev + 1
-    );
+    setCurrentTripIndex((prev) => (prev === trips.length - 1 ? 0 : prev + 1));
   };
 
   const handlePrev = () => {
-    setCurrentTripIndex((prev) =>
-      prev === 0 ? trips.length - 1 : prev - 1
-    );
+    setCurrentTripIndex((prev) => (prev === 0 ? trips.length - 1 : prev - 1));
   };
 
   const handleVote = async (tripId, dayId, activityId, vote) => {
@@ -143,8 +139,8 @@ const TripPage = () => {
             <p>End Date: {selectedTrip.endDate}</p>
             <p>Description: {selectedTrip.description}</p>
 
-            <AddActivityCard 
-              trip={selectedTrip} 
+            <AddActivityCard
+              trip={selectedTrip}
               onActivityAdded={async (newActivity) => {
                 const updatedActivities = await Promise.all(
                   selectedTrip.days.map((dayId) =>
@@ -158,7 +154,7 @@ const TripPage = () => {
             <div className="activities-section">
               <h3>Activities</h3>
               {activities
-                .filter(activity => activity.tripId === selectedTrip.id)
+                .filter((activity) => activity.tripId === selectedTrip.id)
                 .map((activity) => (
                   <div
                     key={activity.id}
