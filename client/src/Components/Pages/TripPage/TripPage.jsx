@@ -109,7 +109,7 @@ const TripPage = () => {
           <button className="btn" onClick={handlePrev}>
             <FaArrowLeft />
           </button>
-          <div className="trips-carousel">
+          <div className="trips-carousel" id="trip-go">
             {trips.map((trip, index) => (
               <div
                 key={trip.id}
@@ -118,7 +118,11 @@ const TripPage = () => {
                 }`}
                 onClick={() => handleTripSelect(trip)}
               >
-                <img src={trip.thumbnail} alt={trip.destination} />
+                <img
+                  src={trip.icon}
+                  alt={trip.destination}
+                  className="trip-icon-image"
+                />
                 <h3>{trip.destination}</h3>
                 <p>
                   {trip.startDate} - {trip.endDate}
@@ -132,7 +136,7 @@ const TripPage = () => {
         </div>
 
         {selectedTrip && (
-          <div className="trip-details">
+          <div className="trip-details" id="activity">
             <h2>Trip to {selectedTrip.destination}</h2>
             <p>Location: {selectedTrip.location}</p>
             <p>Start Date: {selectedTrip.startDate}</p>
@@ -153,49 +157,53 @@ const TripPage = () => {
 
             <div className="activities-section">
               <h3>Activities</h3>
-              {activities
-                .filter((activity) => activity.tripId === selectedTrip.id)
-                .map((activity) => (
-                  <div
-                    key={activity.id}
-                    className={`activity-card ${
-                      activity.status === "pending" ? "pending" : ""
-                    }`}
-                  >
-                    <h4>{activity.name}</h4>
-                    <p>{activity.description}</p>
-                    {activity.status === "pending" && (
-                      <div className="vote-buttons">
-                        <>
-                          <button
-                            onClick={() =>
-                              handleVote(
-                                selectedTrip.id,
-                                activity.dayId,
-                                activity.id,
-                                "up"
-                              )
-                            }
-                          >
-                            👍 {activity.upvotes}
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleVote(
-                                selectedTrip.id,
-                                activity.dayId,
-                                activity.id,
-                                "down"
-                              )
-                            }
-                          >
-                            👎 {activity.downvotes}
-                          </button>
-                        </>
-                      </div>
-                    )}
-                  </div>
-                ))}
+              {activities.length === 0 ? (
+                <p>No Activities added yet</p>
+              ) : (
+                activities
+                  .filter((activity) => activity.tripId === selectedTrip.id)
+                  .map((activity) => (
+                    <div
+                      key={activity.id}
+                      className={`activity-card ${
+                        activity.status === "pending" ? "pending" : ""
+                      }`}
+                    >
+                      <h4>{activity.name}</h4>
+                      <p>{activity.description}</p>
+                      {activity.status === "pending" && (
+                        <div className="vote-buttons">
+                          <>
+                            <button
+                              onClick={() =>
+                                handleVote(
+                                  selectedTrip.id,
+                                  activity.dayId,
+                                  activity.id,
+                                  "up"
+                                )
+                              }
+                            >
+                              👍 {activity.upvotes}
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleVote(
+                                  selectedTrip.id,
+                                  activity.dayId,
+                                  activity.id,
+                                  "down"
+                                )
+                              }
+                            >
+                              👎 {activity.downvotes}
+                            </button>
+                          </>
+                        </div>
+                      )}
+                    </div>
+                  ))
+              )}
             </div>
           </div>
         )}

@@ -52,7 +52,7 @@ const Navbar = () => {
           </div>
           {location.pathname === "/mytrip" && (
             <div className="nav-links-bottom">
-              <a href="#trip">Trip</a>
+              <a href="#trip-go">Trip</a>
               <a href="#activity">Activity</a>
               <a href="#vote">Vote</a>
             </div>

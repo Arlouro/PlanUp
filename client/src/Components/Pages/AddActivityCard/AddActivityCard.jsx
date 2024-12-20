@@ -113,7 +113,7 @@ const AddActivityCard = ({ trip, onActivityAdded }) => {
           />
         </div>
 
-        <div className="form-group time-inputs">
+        <div className="time-inputs">
           <input
             type="number"
             placeholder="H"
