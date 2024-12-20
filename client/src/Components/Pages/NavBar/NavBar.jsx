@@ -29,7 +29,10 @@ const Navbar = () => {
     try {
       const success = await authAPI.logout();
       if (success) {
+        setUser(null);
         window.location.href = "/login";
+      } else {
+        alert('Failed to log out. Please try again.');
       }
     } catch (error) {
       console.error('Failed to sign out:', error);

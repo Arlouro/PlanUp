@@ -8,7 +8,7 @@ export const authAPI = {
 
   logout: async () => {
     const response = await fetch(`${API_URL}/logout`, {
-      method: 'GET',
+      method: 'POST',
       credentials: 'include'
     });
     return response.ok;
