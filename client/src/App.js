@@ -6,6 +6,7 @@ import SignUpForm from './Components/Pages/LoginSignUpForm/SignUpForm';
 import HomePage from './Components/Pages/HomePage/HomePage';
 import TripPage from './Components/Pages/TripPage/TripPage';
 import NewTripForm from './Components/Pages/NewTrip/NewTripForm';
+import Notification from './Components/Pages/Notifications/Notifications';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/signup" element={<SignUpForm />} />
         <Route path="/mytrip" element={ <><Navbar /> <TripPage /></>} />
         <Route path="/newtrip" element={ <><Navbar /> <NewTripForm /></>} />
+        <Route path="/notifications" element={ <><Navbar /> <Notification /></>} />
       </Routes>
     </Router>
   );

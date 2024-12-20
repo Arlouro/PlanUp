@@ -77,10 +77,14 @@
 .usersection {
   display: flex;
   align-items: center;
+<<<<<<< HEAD
   gap: 1.5rem;
   padding: 0.5rem;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 3rem;
+=======
+  gap: 5px;
+>>>>>>> 6f27fbb08d6c3a6d2f83d21f34a12073abd06235
 }
 
 .username {
@@ -92,6 +96,7 @@
 }
 
 .usericon {
+<<<<<<< HEAD
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 50%;
@@ -102,6 +107,13 @@
 .usericon:hover {
   transform: scale(1.05);
   border-color: white;
+=======
+  color: #fff;
+  margin-right: 20px;
+  border-radius: 50%;
+  height: 60px;
+  width: auto;
+>>>>>>> 6f27fbb08d6c3a6d2f83d21f34a12073abd06235
 }
 
 .dropdown {
