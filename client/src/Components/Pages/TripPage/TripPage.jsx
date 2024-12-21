@@ -46,17 +46,26 @@ const TripPage = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleTripSelect = async (trip) => {
+  const fetchActivities = async (trip) => {
     try {
       const activitiesData = await Promise.all(
-        trip.days.map((dayId) =>
-          activitiesAPI.getActivitiesByDay(trip._id, dayId)
+        trip.days.map((day) =>
+          activitiesAPI.getActivitiesByDay(trip._id, day.id.toString())
         )
       );
-      setSelectedTrip(trip);
-      setActivities(activitiesData.flat());
+      return activitiesData.flat();
     } catch (err) {
-      setError("Failed to load trip activities");
+      throw new Error("Failed to load trip activities");
+    }
+  };
+
+  const handleTripSelect = async (trip) => {
+    try {
+      setSelectedTrip(trip);
+      const activitiesData = await fetchActivities(trip);
+      setActivities(activitiesData);
+    } catch (err) {
+      setError(err.message);
     }
   };
 
@@ -70,14 +79,10 @@ const TripPage = () => {
 
   const handleVote = async (tripId, dayId, activityId, vote) => {
     try {
-      await activitiesAPI.voteActivity(tripId, dayId, activityId, vote);
+      await activitiesAPI.voteActivity(tripId, dayId, activityId, vote === "👍" ? "positive" : "negative");
       if (selectedTrip) {
-        const updatedActivities = await Promise.all(
-          selectedTrip.days.map((dayId) =>
-            activitiesAPI.getActivitiesByDay(selectedTrip._id, dayId)
-          )
-        );
-        setActivities(updatedActivities.flat());
+        const updatedActivities = await fetchActivities(selectedTrip);
+        setActivities(updatedActivities);
       }
     } catch (err) {
       setError("Failed to submit vote");
@@ -144,13 +149,9 @@ const TripPage = () => {
 
             <AddActivityCard
               trip={selectedTrip}
-              onActivityAdded={async (newActivity) => {
-                const updatedActivities = await Promise.all(
-                  selectedTrip.days.map((dayId) =>
-                    activitiesAPI.getActivitiesByDay(selectedTrip._id, dayId)
-                  )
-                );
-                setActivities(updatedActivities.flat());
+              onActivityAdded={async () => {
+                const updatedActivities = await fetchActivities(selectedTrip);
+                setActivities(updatedActivities);
               }}
             />
 
@@ -159,49 +160,47 @@ const TripPage = () => {
               {activities.length === 0 ? (
                 <p>No Activities added yet</p>
               ) : (
-                activities
-                  .filter((activity) => activity.tripId === selectedTrip.id)
-                  .map((activity) => (
-                    <div
-                      key={activity.id}
-                      className={`activity-card ${
-                        activity.status === "pending" ? "pending" : ""
-                      }`}
-                    >
-                      <h4>{activity.name}</h4>
-                      <p>{activity.description}</p>
-                      {activity.status === "pending" && (
-                        <div className="vote-buttons">
-                          <>
-                            <button
-                              onClick={() =>
-                                handleVote(
-                                  selectedTrip.id,
-                                  activity.dayId,
-                                  activity.id,
-                                  "up"
-                                )
-                              }
-                            >
-                              👍 {activity.upvotes}
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleVote(
-                                  selectedTrip.id,
-                                  activity.dayId,
-                                  activity.id,
-                                  "down"
-                                )
-                              }
-                            >
-                              👎 {activity.downvotes}
-                            </button>
-                          </>
-                        </div>
-                      )}
-                    </div>
-                  ))
+                activities.map((activity) => (
+                  <div
+                    key={activity._id}
+                    className={`activity-card ${
+                      activity.state === "pending" ? "pending" : ""
+                    }`}
+                  >
+                    <h4>{activity.name}</h4>
+                    <p>Location: {activity.location}</p>
+                    <p>Time: {activity.time}</p>
+                    <p>Duration: {activity.duration}</p>
+                    {activity.state === "pending" && (
+                      <div className="vote-buttons">
+                        <button
+                          onClick={() =>
+                            handleVote(
+                              selectedTrip._id,
+                              activity.dayId,
+                              activity._id,
+                              "👍"
+                            )
+                          }
+                        >
+                          👍 {activity.votes?.positive || 0}
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleVote(
+                              selectedTrip._id,
+                              activity.dayId,
+                              activity._id,
+                              "👎"
+                            )
+                          }
+                        >
+                          👎 {activity.votes?.negative || 0}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))
               )}
             </div>
           </div>

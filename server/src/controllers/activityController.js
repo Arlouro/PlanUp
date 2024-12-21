@@ -42,8 +42,6 @@ export const createActivity = async (request, response) => {
     try {
         const db = getDB();
         
-        const [hour, minute] = time.split(':');
-
         const newActivity = {
             activityId: new ObjectId(),
             tripId,
