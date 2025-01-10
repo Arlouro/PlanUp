@@ -3,8 +3,11 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { ObjectId } from 'mongodb';
 import { getDB } from './config/db.js';
 import config from './config/env.js';
+import config from './config/env.js';
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
+const ip = process.env.VM_IP || 'localhost';
+
+const BASE_URL = process.env.BASE_URL || `http://${ip}:${config.port}`;
 
 passport.serializeUser((user, done) => {
   console.log('Serializing user:', user);
