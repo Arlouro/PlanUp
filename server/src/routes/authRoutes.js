@@ -1,6 +1,6 @@
 import express from 'express';
 import passport from 'passport';
-import config from '../config/env';
+import config from '../config/env.js';
 const router = express.Router();
 
 const vmIp = config.vmIP || 'localhost';
