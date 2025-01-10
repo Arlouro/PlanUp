@@ -1,20 +1,22 @@
 import express from 'express';
 import passport from 'passport';
-
+import config from '../config/env';
 const router = express.Router();
+
+const vmIp = config.vmIP || 'localhost';
 
 router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 router.get('/auth/google/callback',
   passport.authenticate('google', { 
-    failureRedirect: `http://localhost:3000/login`,
+    failureRedirect: `http://${vmIp}:3000/login`,
     session: true 
   }),
   (req, res) => {
     req.session.save((err) => {
       if (err) {
         console.error('Session save error:', err);
-        return res.redirect('http://localhost:3000/login');
+        return res.redirect(`http://${vmIp}:3000/login`);
       }
       console.log('Session after Google auth:', req.session);
       console.log('User after Google auth:', req.user);
@@ -22,7 +24,7 @@ router.get('/auth/google/callback',
       res.send(`
         <html>
           <script>
-            window.location.href = 'http://localhost:3000/mytrip';
+            window.location.href = 'http://${vmIp}:3000/mytrip';
           </script>
         </html>
       `);
