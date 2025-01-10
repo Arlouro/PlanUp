@@ -6,7 +6,7 @@ import config from './config/env.js';
 
 const ip = process.env.VM_IP || 'localhost';
 
-const BASE_URL = process.env.BASE_URL || `http://${ip}:${config.port}`;
+const BASE_URL = `http://${ip}:${config.port}`;
 
 passport.serializeUser((user, done) => {
   console.log('Serializing user:', user);
